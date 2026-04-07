@@ -15,3 +15,6 @@ class GameService():
             for model in models:
                 action = model.get_action(self.game_state)
                 self.game_state.update_state(action)
+
+    def reset(self):
+        self.game_state.reset()
