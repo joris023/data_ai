@@ -4,7 +4,7 @@ import time
 
 from services.logger import log
 from models.game_state import GameState
-from services.model import get_action
+# from services.model import get_action
 
 def connect_to_server() -> socket.socket:
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -30,7 +30,7 @@ def run_model(client: socket.socket) -> None:
             log("Recieved the state", source="Server")
 
             log("Calculating action")
-            action = get_action(game_state)
+            action = "TEST ACTION"
 
             time.sleep(1)
             log(f"Sending {action} action to Server")
