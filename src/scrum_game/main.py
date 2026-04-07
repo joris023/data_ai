@@ -1,0 +1,7 @@
+from scrum_game.services.game_service import GameService
+from scrum_game.ai_models.model_joris import ModelJoris
+
+if __name__ == "__main__":
+    model_joris_1 = ModelJoris()
+    model_joris_2 = ModelJoris()
+    game_service = GameService([model_joris_1, model_joris_2])
