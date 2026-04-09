@@ -134,16 +134,13 @@ class GameState():
         if field.features < 1: field.features = 1
         elif field.features > 4: field.features = 4
 
-        log(f"Product/Sprint changed = P{player.position.product}:S{player.position.sprint}, \
-            change with {score} features. Result {field.features} features")
+        log(f"Product/Sprint changed = P{player.position.product}:S{player.position.sprint}, change with {score} features. Result {field.features} features")
 
 
 
     def __str__(self):
-        result = f"\n{'='*60}\nSPRINT {self.sprint} - CURRENT TURN {self.current_turn}\n{'='*60}\n"
-
         # Print Players
-        result += "PLAYERS:\n"
+        result = "\nPLAYERS:\n"
         for i, player in enumerate(self.players):
             result += f"{i}. {player}\n"
 

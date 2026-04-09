@@ -16,14 +16,15 @@ class GameService():
 
             for turn, player in enumerate(self.game_state.players):
                 self.game_state.current_turn = turn
-
+                print(f"\n\n\n{'='*60}\nSPRINT {sprint} - CURRENT TURN {turn}\n{'='*60}\n")
                 actions = self._get_possible_actions(player, sprint)
                 action = player.model.get_action(game_state=self.game_state, actions_list=actions)
                 self.game_state.update_state(action)
+
                 print(self.game_state)
-        
-            self.game_state.draw_incident_card()
             
+            self.game_state.draw_incident_card()
+        print(f"\n\n\n{'='*60}\nFINAL SPRINT (6)\n{'='*60}\n")    
         for turn, player in enumerate(self.game_state.players):
             self.game_state.current_turn = turn
             self.game_state.update_state()
@@ -32,7 +33,7 @@ class GameService():
         for player in self.game_state.players:
             if not winner or player.balance > winner.balance:
                 winner = player
-        log(winner)           
+        print(f"\n{'='*60}\nWINNER : {winner}\n{'='*60}\n")            
                 
     def reset(self):
         self.game_state.reset()
