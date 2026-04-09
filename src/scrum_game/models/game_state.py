@@ -120,7 +120,8 @@ class GameState():
         for sprint in range(4):
             field = self.board[Position(product=product, sprint=sprint+1)]
             field.rings += score
-            if field.rings < 0: field.rings = 0
+            if field.rings < 0: 
+                field.rings = 0
         
         log(f"Product changed = {product}, change with {score} rings.")
 
@@ -133,8 +134,10 @@ class GameState():
         score = random.randint(-2, 2)
         field.features += score
         
-        if field.features < 1: field.features = 1
-        elif field.features > 4: field.features = 4
+        if field.features < 1: 
+            field.features = 1
+        elif field.features > 4: 
+            field.features = 4
 
         log(f"Product/Sprint changed = P{player.position.product}:S{player.position.sprint}, change with {score} features. Result {field.features} features")
 

@@ -1,6 +1,5 @@
 from src.scrum_game.ai_models.ai_base_model import AIBaseModel
 from src.scrum_game.models.game_state import GameState
-from src.scrum_game.utils.logger import log
 from src.scrum_game.models.player import Player
 from src.scrum_game.models.enums.action import Action
 
