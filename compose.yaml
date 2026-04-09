@@ -1,11 +1,4 @@
 services:
-  game_api:
-    build: game_api
-    ports:
-      - 9999:9999
-    depends_on:
-      - database
-
   database:
     image: postgres:17
     environment:
@@ -28,9 +21,6 @@ services:
       - 5050:80
     depends_on:
       - database
-
-  model_joris:
-    build: model_joris
 
 volumes:
   pgadmin_data:
