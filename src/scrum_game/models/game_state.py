@@ -4,6 +4,7 @@ from src.scrum_game.models.field import Field
 from src.scrum_game.models.enums.action import Action
 from src.scrum_game.models.position import Position
 from src.scrum_game.ai_models.ai_base_model import AIBaseModel
+from src.scrum_game.utils.logger import log
 from .data import default_board
 import random
 
@@ -13,7 +14,7 @@ class GameState():
     current_turn: int
     sprint: int
     players: list[Player]
-    board: list[Field]
+    board: dict[Position, Field]
 
     def __init__(self, ai_models:list[AIBaseModel]) -> None:
         self.current_turn = 0
@@ -31,42 +32,80 @@ class GameState():
         self.board = default_board
 
     # TAAK
-    def update_state(self, action:Action):
+    def update_state(self, action:Action|None=None):
+
+        if self.sprint != 0:
+            self._roll_dice()
+            pass
+        if action:
+            self._apply_action(action)
+
+        self._check_balance()
+
+
+    def _roll_dice(self) -> None:
         
         player = self.players[self.current_turn]
+        field = self.board[player.position]
+
+        features = field.features
+        rings = field.rings
+
+        score = 0
         
-        self._apply_action(player, action)
+        for _ in range(5):
+            match features:
+                case 1:
+                    roll = random.randint(1, 20)
+                case 2:
+                    roll = random.randint(1, 10) + random.randint(1, 10)
+                case 3 | 4:
+                    roll = random.randint(1, 6) + random.randint(1, 6) + random.randint(1, 6)
+            score += roll - 12
 
-    def _apply_action(self, player:Player, action:Action) -> None:
+        total = 0
+        if score > 0:
+            total -= (score * 1_000)
+        else:
+            total += (rings * 5_000) + (score * 1000)
 
+        log(f"Had a balance of {player.balance} scored: {score} rings: {rings} so {total} recieved")
+        player.balance += total
+        log(f"Updated balance = {player.balance}")
+
+    
+
+    def _check_balance(self):
+        player = self.players[self.current_turn]
+
+        while player.balance < 0:
+            player.debt += 50_000
+            player.balance += 50_000
+
+
+
+    def _apply_action(self, action:Action) -> None:
+        player = self.players[self.current_turn]
         match action:
             case Action.SWITCH01:
-                player.position.product = 1
+                player.position = Position(product=1, sprint=player.position.sprint)
             case Action.SWITCH02:
-                player.position.product = 2
+                player.position = Position(product=2, sprint=player.position.sprint)
             case Action.SWITCH03:
-                player.position.product = 3
+                player.position = Position(product=3, sprint=player.position.sprint)
             case Action.SWITCH04:
-                player.position.product = 4
+                player.position = Position(product=4, sprint=player.position.sprint)
             case Action.SWITCH05:
-                player.position.product = 5
-            case Action.SWITCH06:
-                player.position.product = 6
+                player.position = Position(product=5, sprint=player.position.sprint)
             case Action.STAY:
-                player.position.sprint += 1
+                player.position = Position(product=player.position.product, sprint=player.position.sprint + 1)
             case _:
                 pass
         
         if action != Action.STAY:
             player.balance -= 5_000
-            player.position.sprint = 1
+            player.position = Position(product=player.position.product, sprint=1)
 
-    def _roll_dice(field:Field) -> None:
-        
-        # Dobbel je 
-        # Krijg je geld of niet postive verlies je geld
-        # als die geld afgaat en negative dan leent die automatisch
-        pass
 
 
     def __str__(self):
@@ -80,7 +119,7 @@ class GameState():
         result += f"\nBOARD ({len(self.board)} fields):\n"
         
         # Print Board
-        for field in self.board:
-            result += f"{field}\n"
+        for position, field in self.board.items():
+            result += f"{position} - {field}\n"
         result += "="*60
         return result

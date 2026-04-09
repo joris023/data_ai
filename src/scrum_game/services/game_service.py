@@ -21,6 +21,13 @@ class GameService():
                 action = player.model.get_action(game_state=self.game_state, actions_list=actions)
                 self.game_state.update_state(action)
                 print(self.game_state)
+        
+        for turn, player in enumerate(self.game_state.players):
+            self.game_state.current_turn = turn
+            self.game_state.update_state()
+            
+
+        # EVALUATE WINNER
                 
     def reset(self):
         self.game_state.reset()

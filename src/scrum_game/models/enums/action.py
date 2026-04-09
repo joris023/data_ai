@@ -6,5 +6,4 @@ class Action(Enum):
     SWITCH03 = "switch03"
     SWITCH04 = "switch04"
     SWITCH05 = "switch05"
-    SWITCH06 = "switch06"
     STAY = "stay"

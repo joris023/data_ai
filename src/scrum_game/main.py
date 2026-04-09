@@ -6,7 +6,7 @@ if __name__ == "__main__":
     model_joris_2 = ModelJoris()
     game_service = GameService([model_joris_1, model_joris_2])
     
-    arg_1 = 2
+    arg_1 = 1
     
     for _ in range(arg_1):
         
