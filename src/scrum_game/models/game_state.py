@@ -7,6 +7,7 @@ from src.scrum_game.ai_models.ai_base_model import AIBaseModel
 from src.scrum_game.utils.logger import log
 from .data import default_board
 import random
+import copy
 
 # 1.
 @dataclass
@@ -20,7 +21,7 @@ class GameState():
         self.current_turn = 0
         self.sprint = 0
         self.players = [Player(position=Position(None, None), balance=30_000, debt=0, model=model) for model in ai_models]
-        self.board = default_board
+        self.board = copy.deepcopy(default_board)
 
     def reset(self) -> None:
         self.sprint = 0
@@ -29,7 +30,8 @@ class GameState():
             player.balance = 30_000
             player.debt = 0
             player.position = Position(None, None)
-        self.board = default_board
+        self.board = copy.deepcopy(default_board)
+        log("RESETTING BOARD")
 
     # TAAK
     def update_state(self, action:Action|None=None):
