@@ -36,11 +36,13 @@ class GameState():
 
         if self.sprint != 0:
             self._roll_dice()
-            pass
+            self._draw_refinment_card()
         if action:
             self._apply_action(action)
-
+            
         self._check_balance()
+        
+
 
 
     def _roll_dice(self) -> None:
@@ -105,6 +107,35 @@ class GameState():
         if action != Action.STAY:
             player.balance -= 5_000
             player.position = Position(product=player.position.product, sprint=1)
+
+
+
+    def draw_incident_card(self):
+        
+        product = random.randint(1, 5)
+        score = random.randint(-5, 5)        
+
+        for sprint in range(4):
+            field = self.board[Position(product=product, sprint=sprint+1)]
+            field.rings += score
+            if field.rings < 0: field.rings = 0
+        
+        log(f"Product changed = {product}, change with {score} rings.")
+
+
+
+    def _draw_refinment_card(self):
+        player = self.players[self.current_turn]
+        field = self.board[player.position]
+
+        score = random.randint(-2, 2)
+        field.features += score
+        
+        if field.features < 1: field.features = 1
+        elif field.features > 4: field.features = 4
+
+        log(f"Product/Sprint changed = P{player.position.product}:S{player.position.sprint}, \
+            change with {score} features. Result {field.features} features")
 
 
 

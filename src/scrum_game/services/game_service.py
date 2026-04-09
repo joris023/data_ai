@@ -22,12 +22,17 @@ class GameService():
                 self.game_state.update_state(action)
                 print(self.game_state)
         
+            self.game_state.draw_incident_card()
+            
         for turn, player in enumerate(self.game_state.players):
             self.game_state.current_turn = turn
             self.game_state.update_state()
-            
 
-        # EVALUATE WINNER
+        winner = None 
+        for player in self.game_state.players:
+            if not winner or player.balance > winner.balance:
+                winner = player
+        log(winner)           
                 
     def reset(self):
         self.game_state.reset()
