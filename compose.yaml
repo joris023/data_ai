@@ -1,34 +1,26 @@
 services:
-  game_api:
-    build: game_api
+  database:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
-      - 8000:8000
-    # depends_on:
-    #   - database
+      - 5432:5432
 
-  # database:
-  #   image: postgres:17
-  #   environment:
-  #     POSTGRES_DB: db
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: pass
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   ports:
-  #     - 5432:5432
-
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@example.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   volumes:
-  #     - pgadmin_data:/var/lib/pgadmin
-  #   ports:
-  #     - 5050:80
-
-  model_joris:
-    build: model_joris
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    depends_on:
+      - database
 
 volumes:
   pgadmin_data:
