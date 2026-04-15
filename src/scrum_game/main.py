@@ -3,14 +3,8 @@ from src.scrum_game.ai_models.model_joris import ModelJoris
 import os
 from dotenv import load_dotenv
 import numpy as np
- 
-load_dotenv()
-if __name__ == "__main__":
-    runs = int(os.environ.get("RUNS"))
-    model_name = str(os.environ.get("MODEL"))
-    amount_of_players = int(os.environ.get("AMOUNT_OF_PLAYERS"))
 
-    print(f"Running {runs} games with model {model_name} and {amount_of_players} players")
+def _get_models(amount_of_players:int, model_name:str) -> list:
 
     models = []
     for _ in range(amount_of_players):
@@ -29,9 +23,20 @@ if __name__ == "__main__":
                 pass
             case _:
                 raise ValueError(f"Model {model_name} not recognized")
+    return models
 
+load_dotenv()
+if __name__ == "__main__":
+    runs = int(os.environ.get("RUNS"))
+    model_name = str(os.environ.get("MODEL"))
+    amount_of_players = int(os.environ.get("AMOUNT_OF_PLAYERS"))
+    
+    models = _get_models(amount_of_players, model_name)
+    
     game_service = GameService(models)
     end_balances = []
+    
+    print(f"Running {runs} games with model {model_name} and {amount_of_players} players")
     for _ in range(runs):
         
         game_service.start()
@@ -42,4 +47,3 @@ if __name__ == "__main__":
 
     mean = np.mean(end_balances)
     print(mean)
-    
