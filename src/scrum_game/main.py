@@ -1,5 +1,6 @@
 from src.scrum_game.services.game_service import GameService
 from src.scrum_game.ai_models.model_joris import ModelJoris
+from src.scrum_game.ai_models.model_rl_value import ModelRLValue
 import os
 from dotenv import load_dotenv
 import numpy as np
@@ -21,6 +22,8 @@ def _get_models(amount_of_players:int, model_name:str) -> list:
                 pass
             case "random":
                 pass
+            case "rl_value":
+                models.append(ModelRLValue())
             case _:
                 raise ValueError(f"Model {model_name} not recognized")
     return models
@@ -38,7 +41,7 @@ if __name__ == "__main__":
     
     print(f"Running {runs} games with model {model_name} and {amount_of_players} players")
     for _ in range(runs):
-        
+        print(f"Starting game {_+1}/{runs}")
         game_service.start()
         for player in game_service.game_state.players:
             end_balances.append(player.balance - player.debt)
