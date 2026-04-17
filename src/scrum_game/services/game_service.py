@@ -26,13 +26,20 @@ class GameService():
             self.game_state.current_turn = turn
             self.game_state.update_state()
 
-        winner = None 
+        winner = None
         print("\n FINAL BALANCES:")
         for player in self.game_state.players:
-            print(f"Player {self.game_state.players.index(player) + 1} - Balance: {player.balance}, Debt: {player.debt}, Net: {player.balance - player.debt}")
+            net = player.balance - player.debt
+            print(f"Player {self.game_state.players.index(player) + 1} - Balance: {player.balance}, Debt: {player.debt}, Net: {net}")
             if not winner or player.balance > winner.balance:
                 winner = player
-        print(f"\n{'='*60}\nWINNER : {winner}\n{'='*60}\n")            
+        print(f"\n{'='*60}\nWINNER : {winner}\n{'='*60}\n")
+
+        # Episodic policy update: each model learns from the full episode return
+        for player in self.game_state.players:
+            if hasattr(player.model, 'end_episode'):
+                net = player.balance - player.debt
+                player.model.end_episode(net)            
                 
     def reset(self):
         self.game_state.reset()
@@ -41,6 +48,12 @@ class GameService():
         actions_list = [action for action in Action]
         if round == 0 or player.position.sprint == 4:
             actions_list.remove(Action.STAY)
+        # Switching to your current product resets sprint to 1 and costs 5000 for no gain
+        current_product = player.position.product
+        if current_product is not None:
+            switch_to_current = Action(f"switch0{current_product}")
+            if switch_to_current in actions_list:
+                actions_list.remove(switch_to_current)
         return actions_list
 
     def _execute_player_turn(self, player: Player, sprint: int):
