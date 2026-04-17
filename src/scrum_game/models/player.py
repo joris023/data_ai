@@ -7,7 +7,7 @@ class Player():
     position: Position
     balance: int
     debt: int
-    model: AIBaseModel
+    model: AIBaseModel | None = None
 
     def __str__(self):
         net = self.balance - self.debt

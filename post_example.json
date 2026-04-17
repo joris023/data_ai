@@ -1,0 +1,42 @@
+{
+  "ai_model_name": "model_joris",
+  "is_init": false,
+  "current_turn": 0,
+  "sprint": 1,
+  "players": [
+    {
+      "position": {
+        "product": 1,
+        "sprint": 1
+      },
+      "balance": 30000,
+      "debt": 0
+    },
+    {
+      "position": {
+        "product": 2,
+        "sprint": 1
+      },
+      "balance": 30000,
+      "debt": 0
+    }
+  ],
+  "board": [
+    {
+      "position": { "product": 1, "sprint": 1 },
+      "field": { "rings": 3, "features": 2 }
+    },
+    {
+      "position": { "product": 1, "sprint": 2 },
+      "field": { "rings": 2, "features": 3 }
+    },
+    {
+      "position": { "product": 2, "sprint": 1 },
+      "field": { "rings": 4, "features": 1 }
+    },
+    {
+      "position": { "product": 2, "sprint": 2 },
+      "field": { "rings": 1, "features": 4 }
+    }
+  ]
+}

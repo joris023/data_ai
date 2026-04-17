@@ -7,6 +7,7 @@ from src.scrum_game.ai_models.ai_base_model import AIBaseModel
 from src.scrum_game.utils.logger import log
 from .data import default_board
 import random
+import copy
 
 # 1.
 @dataclass
@@ -20,7 +21,7 @@ class GameState():
         self.current_turn = 0
         self.sprint = 0
         self.players = [Player(position=Position(None, None), balance=30_000, debt=0, model=model) for model in ai_models]
-        self.board = default_board
+        self.board = copy.deepcopy(default_board)
 
     def reset(self) -> None:
         self.sprint = 0
@@ -29,7 +30,8 @@ class GameState():
             player.balance = 30_000
             player.debt = 0
             player.position = Position(None, None)
-        self.board = default_board
+        self.board = copy.deepcopy(default_board)
+        log("RESETTING BOARD")
 
     # TAAK
     def update_state(self, action:Action|None=None):
@@ -118,7 +120,8 @@ class GameState():
         for sprint in range(4):
             field = self.board[Position(product=product, sprint=sprint+1)]
             field.rings += score
-            if field.rings < 0: field.rings = 0
+            if field.rings < 0: 
+                field.rings = 0
         
         log(f"Product changed = {product}, change with {score} rings.")
 
@@ -131,19 +134,18 @@ class GameState():
         score = random.randint(-2, 2)
         field.features += score
         
-        if field.features < 1: field.features = 1
-        elif field.features > 4: field.features = 4
+        if field.features < 1: 
+            field.features = 1
+        elif field.features > 4: 
+            field.features = 4
 
-        log(f"Product/Sprint changed = P{player.position.product}:S{player.position.sprint}, \
-            change with {score} features. Result {field.features} features")
+        log(f"Product/Sprint changed = P{player.position.product}:S{player.position.sprint}, change with {score} features. Result {field.features} features")
 
 
 
     def __str__(self):
-        result = f"\n{'='*60}\nSPRINT {self.sprint} - CURRENT TURN {self.current_turn}\n{'='*60}\n"
-
         # Print Players
-        result += "PLAYERS:\n"
+        result = "\nPLAYERS:\n"
         for i, player in enumerate(self.players):
             result += f"{i}. {player}\n"
 

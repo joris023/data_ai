@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from src.scrum_game.models.position import Position
 
 @dataclass
 class Field():
