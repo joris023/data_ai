@@ -46,6 +46,7 @@ class GameService():
     def _execute_player_turn(self, player: Player, sprint: int):
         """Execute a player's turn and handle learning if applicable"""
         balance_before = player.balance
+        debt_before = player.debt
     
         # Extract state before if model supports learning
         if hasattr(player.model, 'extract_state_features'):
@@ -62,5 +63,6 @@ class GameService():
         if state_before is not None and hasattr(player.model, 'update_learning'):
             balance_after = player.balance
             state_after = player.model.extract_state_features(self.game_state)
-            reward = balance_after - balance_before
+            debt_after = player.debt
+            reward = (balance_after - debt_after) - (balance_before - debt_before)
             player.model.update_learning(state_before, action, reward, state_after)
