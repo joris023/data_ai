@@ -33,9 +33,11 @@ class GameState():
         self.board = copy.deepcopy(default_board)
         log("RESETTING BOARD")
 
-    # TAAK
-    def update_state(self, action:Action|None=None):
 
+
+    def update_state(self, action:Action|None=None) -> float:
+
+        start_balance = self.players[self.current_turn].balance - self.players[self.current_turn].debt
         if self.sprint != 0:
             self._roll_dice()
             self._draw_refinment_card()
@@ -43,8 +45,13 @@ class GameState():
             self._apply_action(action)
             
         self._check_balance()
-        
+        end_balance = self.players[self.current_turn].balance - self.players[self.current_turn].debt
+        return self._get_reward(start_balance, end_balance)
 
+
+
+    def _get_reward(self, start_balance, end_balance) -> float:
+        return (end_balance - start_balance) / 10_000
 
 
     def _roll_dice(self) -> None:
@@ -140,7 +147,6 @@ class GameState():
             field.features = 4
 
         log(f"Product/Sprint changed = P{player.position.product}:S{player.position.sprint}, change with {score} features. Result {field.features} features")
-
 
 
     def __str__(self):

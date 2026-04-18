@@ -7,7 +7,6 @@ app = fastapi.FastAPI()
 app.include_router(state_router)
 
 if __name__ == "__main__":
-    use_api = bool(os.environ.get("USE_API"))
     model_name = str(os.environ.get("MODEL"))
 
     uvicorn.run("src.scrum_game.api:app", reload=True)

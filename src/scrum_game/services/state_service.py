@@ -1,6 +1,6 @@
 from src.scrum_game.ai_models.ai_base_model import AIBaseModel
 from src.scrum_game.models.dto.game_state_dto import GameStateDTO
-from src.scrum_game.ai_models.model_joris import ModelJoris
+from scrum_game.ai_models.model_random import ModelJoris
 from src.scrum_game.models.game_state import GameState
 from src.scrum_game.models.enums.action import Action
 
