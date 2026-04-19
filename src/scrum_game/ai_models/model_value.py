@@ -119,10 +119,10 @@ class ModelValue(AIBaseModel):
 
         loss = self.loss_fn(current_q, target_q)
 
+        # Verbeter de weights
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-
         self.losses.append(loss.item())
 
     def _sav_weights(self):
