@@ -5,24 +5,32 @@ from src.scrum_game.utils.plotting import plot_results
 import os
 from dotenv import load_dotenv
 import numpy as np
+import random
+import torch
 
-def _get_model(model_name: str, player_amount:int):
+def _get_model(model_name: str, player_amount:int, seed: int | None = None):
     model_name = model_name.split("_")[0]
     match model_name:
         case "random":
-            return ModelRandom()
+            return ModelRandom(seed)
         case "value":
-            return ModelValue(player_amount)
+            return ModelValue(player_amount, seed)
         case _:
             raise ValueError(f"Model {model_name} not recognized")
 
 
 load_dotenv()
 if __name__ == "__main__":
+    seed = os.environ.get("SEED")
+    if seed:
+        seed = int(seed)
+        random.seed(seed)
+    else:
+        seed = None
     runs = int(os.environ.get("RUNS"))
     model_names = [f"{n.strip()}_{i}" for i, n in enumerate(os.environ.get("MODELS").split(","))]
 
-    models = [_get_model(name, len(model_names)) for name in model_names]
+    models = [_get_model(name, len(model_names), seed) for name in model_names]
     game_service = GameService(models)
 
     results = {name: [] for name in model_names}

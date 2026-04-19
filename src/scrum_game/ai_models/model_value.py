@@ -15,7 +15,12 @@ ALL_ACTIONS = list(Action)
 
 class ModelValue(AIBaseModel):
     
-    def __init__(self, player_amount:int):
+    def __init__(self, player_amount:int, seed: int | None = None):
+        if seed is not None:
+            random.seed(seed)
+            np.random.seed(seed)
+            torch.manual_seed(seed)
+            
         state_dim = 82 + (3 * player_amount)
         self.dqn = DQN(state_dim=state_dim, action_dim=6).to(device)
 

@@ -6,8 +6,9 @@ from src.scrum_game.utils.logger import log
 
 class ModelRandom(AIBaseModel):
 
-    def __int__(self):
-        pass
+    def __init__(self, seed: int | None = None):
+        if seed is not None:
+            random.seed(seed)
 
     def get_action(self, game_state:GameState, actions:list[Action]):
         action_chosen = actions[random.randint(0, len(actions) - 1)]
