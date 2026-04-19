@@ -7,14 +7,15 @@ def plot_results(results: dict[str, list[float]], runs: int):
     plt.figure(figsize=(12, 6))
     for i, (name, rewards) in enumerate(results.items()):
         color = colors[i % len(colors)]
+        cumavg = np.cumsum(rewards) / np.arange(1, len(rewards) + 1)
+        plt.plot(cumavg, linewidth=2, label=f'{name} cumavg ({np.mean(rewards):.0f})', color=color)
         window = max(1, len(rewards) // 20)
         moving_avg = np.convolve(rewards, np.ones(window)/window, mode='valid')
-        plt.plot(rewards, alpha=0.1, color=color)
-        plt.plot(range(window - 1, len(rewards)), moving_avg, linewidth=2, label=f'{name} (avg: {np.mean(rewards):.0f})', color=color)
+        plt.plot(range(window - 1, len(rewards)), moving_avg, linewidth=2, linestyle='--', label=f'{name} moving avg', color=color, alpha=0.7)
     
     plt.xlabel('Game')
     plt.ylabel('Gemiddeld eindbalans per speler')
-    plt.ylim(45_000, 110_000)
+    plt.ylim(30_000, 120_000)
     plt.title(f'Model Vergelijking ({runs} games)')
     plt.legend()
     plt.grid(True)
