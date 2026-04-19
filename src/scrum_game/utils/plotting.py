@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_results(results: dict[str, list[float]], runs: int):
+def plot_results(results: dict[str, list[float]], runs: int) -> None:
     colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple']
     
     plt.figure(figsize=(12, 6))
@@ -13,13 +13,12 @@ def plot_results(results: dict[str, list[float]], runs: int):
         moving_avg = np.convolve(rewards, np.ones(window)/window, mode='valid')
         plt.plot(range(window - 1, len(rewards)), moving_avg, linewidth=2, linestyle='--', label=f'{name} moving avg', color=color, alpha=0.7)
     
-    plt.xlabel('Game')
-    plt.ylabel('Gemiddeld eindbalans per speler')
+    plt.xlabel('Scrum Game')
+    plt.ylabel('Average end balance per player')
     plt.ylim(30_000, 120_000)
-    plt.title(f'Model Vergelijking ({runs} games)')
+    plt.title(f'Model compare ({runs} games)')
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig('comparison.png', dpi=150)
+    plt.savefig('graph.png', dpi=150)
     plt.show()
-    print(f"Grafiek opgeslagen als comparison.png")
