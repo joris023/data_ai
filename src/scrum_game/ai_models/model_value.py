@@ -4,7 +4,7 @@ from src.scrum_game.models.enums.action import Action
 from collections import defaultdict
 import numpy as np
 import random
-from .utils.dqn import DQN
+from src.scrum_game.models.dqn import DQN
 from src.scrum_game.models.position import Position
 import torch
 import torch.nn as nn
