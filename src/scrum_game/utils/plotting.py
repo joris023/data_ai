@@ -11,7 +11,7 @@ def plot_results(results: dict[str, list[float]], runs: int) -> None:
         plt.plot(cumavg, linewidth=2, label=f'{name} cumavg ({np.mean(rewards):.0f})', color=color)
         window = max(1, len(rewards) // 20)
         moving_avg = np.convolve(rewards, np.ones(window)/window, mode='valid')
-        plt.plot(range(window - 1, len(rewards)), moving_avg, linewidth=2, linestyle='--', label=f'{name} moving avg', color=color, alpha=0.7)
+        plt.plot(range(window - 1, len(rewards)), moving_avg, linewidth=2, linestyle='--', label=f'{name} moving avg ({moving_avg[-1]:.0f})', color=color, alpha=0.7)
     
     plt.xlabel('Scrum Game')
     plt.ylabel('Average end balance per player')
